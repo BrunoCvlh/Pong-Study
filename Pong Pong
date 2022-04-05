@@ -1,0 +1,98 @@
+//variaveis da bolinha
+let xBola = 300;
+let yBola = 200;
+let diametro = 15;
+let raio = diametro / 2;
+
+//velocidade da bolinha
+let velocidadeXBola = 6;
+let velocidadeYBola = 6;
+
+//variaveis da raquete
+let xRaquete = 5;
+let yRaquete = 150;
+let wRaquete = 10;
+let hRaquete = 90;
+
+//variaveis oponente
+let xRaqueteOponente = 585;
+let yRaqueteOponente = 150;
+let velocidadeYOponente;
+
+let colidiu = false;
+
+function setup() {
+  createCanvas(600, 400);
+}
+
+function draw() {
+  background(0);
+  mostraBolinha();
+  movimentaBolinha();
+  verificaColisao();
+  mostraRaquete(xRaquete, yRaquete);
+  movimentaMinhaRaquete();
+  //verificaColisaoRaquete();
+  colisaoMinhaRaqueteBiblioteca();
+  mostraRaquete(xRaqueteOponente, yRaqueteOponente);
+  movimentaRaqueteOponente();
+  colisaoRaqueteOponenteBiblioteca();
+  
+}
+
+function mostraBolinha() {
+  circle(xBola, yBola, diametro);
+}
+
+function movimentaBolinha() {
+  xBola += velocidadeXBola;
+  //yBola += velocidadeYBola;
+}
+
+function verificaColisao() {
+  if (xBola + raio > width || xBola - raio < 0) {
+    velocidadeXBola *= -1;
+  }
+  if (yBola + raio > height || yBola - raio < 0) {
+    velocidadeYBola *= -1;
+  }
+}
+
+function mostraRaquete(x, y) {
+  rect(x, y, wRaquete, hRaquete);
+}
+
+function movimentaMinhaRaquete(){
+  if (keyIsDown(UP_ARROW)){
+    yRaquete -= 8;
+  }
+   if (keyIsDown(DOWN_ARROW)){
+    yRaquete += 8;
+  }
+}
+function verificaColisaoRaquete(){
+  if (xBola - raio < xRaquete + wRaquete && yBola - raio < yRaquete + hRaquete && yBola + raio > yRaquete){
+    velocidadeXBola *= -1;
+  }
+}
+
+function colisaoMinhaRaqueteBiblioteca(){
+  colidiu =
+    collideRectCircle(xRaquete, yRaquete, wRaquete, hRaquete, xBola, yBola, raio);
+  if (colidiu){ 
+    velocidadeXBola *= -1;
+}
+}
+
+function colisaoRaqueteOponenteBiblioteca(){
+  colidiu =
+    collideRectCircle(xRaqueteOponente, yRaqueteOponente, wRaquete, hRaquete, xBola, yBola, raio);
+  if (colidiu){ 
+    velocidadeXBola *= -1;
+  }
+}
+
+function movimentaRaqueteOponente(){
+ velocidadeYOponente = yBola - yRaqueteOponente - wRaquete / 2 -30;
+  yRaqueteOponente += velocidadeYOponente
+}
